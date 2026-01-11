@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Daftar Menu - Cafe Berkah</title>
+
+  <link href="https://cdn-icons-png.flaticon.com/512/751/751621.png" rel="icon">
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <style>
+    /* --- 1. SETUP TEMA (WARM COFFEE) --- */
+    :root {
+      --bg-body: #1a120b;
+      --bg-surface: #261a15;
+      --color-accent: #d4a373;
+      --color-text: #faedcd;
+      --color-muted: #a49688;
+      
+      --font-heading: 'Playfair Display', serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-body);
+      color: var(--color-text);
+      overflow-x: hidden;
+      line-height: 1.8;
+    }
+
+    a, a:hover, a:focus { text-decoration: none !important; outline: none; }
+    h1, h2, h3, h4, h5 { font-family: var(--font-heading); color: var(--color-text); font-weight: 700; }
+    
+    .text-gold { color: var(--color-accent) !important; }
+
+    /* --- 2. HEADER (UPDATED DARI INDEX) --- */
+    .header {
+      background: rgba(26, 18, 11, 0.95);
+      padding: 10px 0;
+      transition: all 0.5s;
+      z-index: 997;
+      border-bottom: 1px solid rgba(212, 163, 115, 0.1);
+      backdrop-filter: blur(15px);
+    }
+    .header .container { display: flex; align-items: center; justify-content: space-between; position: relative; }
+    
+    .logo { 
+        font-size: 24px; font-weight: 700; letter-spacing: 1px; color: var(--color-text); z-index: 2; 
+        display: flex; align-items: center; 
+    }
+    
+    /* Desktop Menu */
+    .navmenu { position: absolute; left: 50%; transform: translateX(-50%); }
+    .navmenu ul { margin: 0; padding: 0; display: flex; list-style: none; gap: 40px; }
+    .navmenu a {
+      color: rgba(250, 237, 205, 0.7); font-size: 13px; font-weight: 600; 
+      text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; position: relative; padding: 5px 0;
+    }
+    .navmenu a::after {
+      content: ""; position: absolute; width: 0; height: 1px; bottom: 0; left: 0;
+      background-color: var(--color-accent); transition: width 0.3s ease;
+    }
+    .navmenu a:hover, .navmenu a.active { color: var(--color-text); }
+    .navmenu a:hover::after, .navmenu a.active::after { width: 100%; }
+
+    /* Info Jam Buka Desktop */
+    .header-info { display: flex; align-items: center; gap: 12px; z-index: 2; }
+    .header-info i { font-size: 26px; color: var(--color-accent); }
+    .header-info-text { line-height: 1.2; text-align: left; }
+    .header-info-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--color-muted); display: block; }
+    .header-info-value { font-size: 14px; font-weight: 700; color: var(--color-text); display: block; }
+    .header-info-sub { font-size: 10px; color: var(--color-accent); display: block; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }
+
+    /* --- INFO JAM BUKA (MOBILE STYLE) --- */
+    .mobile-header-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-right: 15px;
+    }
+    .mobile-header-info i { font-size: 20px; color: var(--color-accent); }
+    .mobile-info-text { line-height: 1.1; text-align: left; }
+    .mobile-label { font-size: 7px; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; }
+    .mobile-value { font-size: 11px; font-weight: 700; color: var(--color-text); display: block; }
+    .mobile-sub { font-size: 8px; color: var(--color-accent); font-weight: 600; letter-spacing: 0.3px; display: block; }
+
+    /* TOMBOL MENU MOBILE */
+    .mobile-nav-toggle {
+        color: var(--color-text);
+        font-size: 30px;
+        cursor: pointer;
+        display: none; 
+        z-index: 9999;
+    }
+
+    /* RESPONSIVE CSS (MOBILE HEADER) */
+    @media (max-width: 991px) {
+      .header-info { display: none; } /* Sembunyikan jam desktop */
+      .mobile-nav-toggle { display: block; } /* Tampilkan burger */
+
+      /* Menu Slide Mobile */
+      .navmenu {
+        position: fixed;
+        top: 0; right: -100%;
+        width: 50vh; max-width: 300px;
+        height: 100vh;
+        transition: 0.3s;
+        z-index: 9997;
+        background: rgba(26, 18, 11, 0.98);
+        padding: 20px 20px 20px 20px;
+        display: block !important;
+        border-left: 1px solid rgba(212, 163, 115, 0.2);
+        left: auto; 
+        transform: none; 
+        overflow-y: auto;
+       }
+      
+      .navmenu ul { flex-direction: column; align-items: center; gap: 25px; }
+      .navmenu a { font-size: 16px; width: 100%; text-align: center; }
+      
+      body.mobile-nav-active .navmenu { right: 0; }
+      body.mobile-nav-active { overflow: hidden; }
+    }
+
+    /* --- 3. MENU PAGE STYLING (KONTEN UTAMA) --- */
+    .menu-page { padding-top: 140px; padding-bottom: 80px; }
+    
+    .section-title { text-align: center; margin-bottom: 50px; }
+    .section-title h2 { font-size: 48px; margin-bottom: 10px; color: var(--color-accent); }
+    .section-title p { color: var(--color-muted); font-size: 16px; }
+
+    /* Filter Buttons */
+    .menu-filters { list-style: none; padding: 0; margin-bottom: 50px; text-align: center; }
+    .menu-filters li {
+        display: inline-block; cursor: pointer; padding: 10px 30px; margin: 5px;
+        font-size: 14px; font-weight: 600; color: var(--color-text); 
+        border: 1px solid rgba(212, 163, 115, 0.3); 
+        border-radius: 50px; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px;
+    }
+    .menu-filters li:hover, .menu-filters li.filter-active {
+        background: var(--color-accent); color: #1a120b; border-color: var(--color-accent);
+    }
+
+    /* --- MENU CARDS --- */
+    .menu-item { margin-bottom: 30px; }
+
+    .menu-card {
+        background: var(--bg-surface); 
+        padding: 30px 20px; 
+        border-radius: 15px;
+        border: 1px solid rgba(255,255,255,0.05); 
+        transition: 0.4s; 
+        height: 100%; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center;
+        text-align: center;
+        position: relative;
+    }
+    
+    .menu-card:hover {
+        border-color: var(--color-accent); transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .menu-card img { 
+        width: 100%; height: 220px; object-fit: cover; 
+        border-radius: 10px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .menu-card h4 { 
+        font-size: 20px; font-weight: 700; margin-bottom: 10px; color: #fff; 
+        line-height: 1.3; min-height: 52px; display: flex; align-items: center; justify-content: center;
+    }
+    
+    .menu-card span { 
+        font-size: 14px; color: var(--color-muted); display: block; margin-bottom: 20px; 
+        line-height: 1.5; flex-grow: 1; min-height: 45px;
+    }
+    
+    .menu-card .price { 
+        color: var(--color-accent); font-weight: 700; font-size: 22px; 
+        font-family: var(--font-heading); margin-top: auto; padding-top: 15px;
+        border-top: 1px dashed rgba(255,255,255,0.1); width: 100%;
+    }
+
+    /* Footer */
+    footer { background: #120c07; padding: 70px 0 30px 0; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; margin-top: 50px; }
+    .footer-brand { font-size: 32px; font-family: var(--font-heading); color: var(--color-accent); margin-bottom: 20px; display: block; font-weight: 700; }
+    .social-links a {
+      font-size: 18px; display: inline-flex; align-items: center; justify-content: center;
+      background: var(--bg-surface); color: var(--color-text); width: 45px; height: 45px; border-radius: 50%; 
+      margin: 0 8px; transition: 0.3s;
+    }
+    .social-links a:hover { background: var(--color-accent); color: #1a120b; }
+    .copyright { color: var(--color-muted); font-size: 13px; margin-top: 40px; }
+
+  </style>
+</head>
+
+<body>
+
+  <header id="header" class="header fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+      
+      <a href="index.html" class="logo">Cafe <span class="text-gold ms-1">Berkah.</span></a>
+      
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="menu.html" class="active">Menu</a></li>
+          <li><a href="gallery.html">Galeri</a></li>
+          <li><a href="contact.html">Kontak</a></li>
+        </ul>
+      </nav>
+
+      <div class="d-flex align-items-center">
+          
+          <div class="header-info d-none d-lg-flex me-3">
+            <i class="bi bi-clock"></i>
+            <div class="header-info-text text-start">
+                <span class="header-info-label">Jam Buka</span>
+                <span class="header-info-value">10:00 - 23:00</span>
+                <span class="header-info-sub">JUMAT: 13:00 - 23:00</span>
+            </div>
+          </div>
+
+          <div class="mobile-header-info d-lg-none">
+              <i class="bi bi-clock"></i>
+              <div class="mobile-info-text">
+                  <span class="mobile-label">JAM BUKA</span>
+                  <span class="mobile-value">10:00 - 23:00</span>
+                  <span class="mobile-sub">JUMAT: 13:00 - 23:00</span>
+              </div>
+          </div>
+
+          <i class="mobile-nav-toggle d-lg-none bi bi-list"></i>
+
+      </div>
+
+    </div>
+  </header>
+
+  <section class="menu-page">
+    <div class="container">
+      <div class="section-title" data-aos="fade-up">
+        <h2>Daftar Menu</h2>
+        <p>Nikmati hidangan lezat dan minuman segar racikan kami</p>
+      </div>
+
+      <div class="row" data-aos="fade-up" data-aos-delay="100">
+        <div class="col-lg-12 d-flex justify-content-center">
+          <ul class="menu-filters">
+            <li data-filter="*" class="filter-active">Semua</li>
+            <li data-filter=".filter-makan">Makanan</li>
+            <li data-filter=".filter-minum">Minuman</li>
+            <li data-filter=".filter-cemilan">Cemilan</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row isotope-container" data-aos="fade-up" data-aos-delay="200">
+        
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-makan">
+          <div class="menu-card">
+            <img src="asset/menu/Nasi Goreng Spesial.jpeg" alt="Nasi Goreng">
+            <h4>Nasi Goreng Spesial</h4>
+            <span>Nasi goreng kampung, telur mata sapi, ayam suwir, kerupuk</span>
+            <div class="price">Rp 25.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-makan">
+          <div class="menu-card">
+            <img src="asset/menu/Mie Goreng Jawa.jpeg" alt="Mie Goreng">
+            <h4>Mie Goreng Jawa</h4>
+            <span>Mie kuning, sayuran, bakso, bumbu rempah jawa</span>
+            <div class="price">Rp 22.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-makan">
+          <div class="menu-card">
+            <img src="asset/menu/Rice Bowl Ayam Crispy.jpg" alt="Rice Bowl">
+            <h4>Rice Bowl Ayam Crispy</h4>
+            <span>Nasi putih, ayam fillet tepung, saus pilihan (BBQ/Blackpepper)</span>
+            <div class="price">Rp 28.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-makan">
+          <div class="menu-card">
+            <img src="asset/menu/Ayam Geprek.jpg" alt="Ayam Geprek">
+            <h4>Ayam Geprek</h4>
+            <span>Ayam crispy, sambal bawang pedas, nasi hangat, lalapan</span>
+            <div class="price">Rp 20.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-makan">
+          <div class="menu-card">
+            <img src="asset/menu/Chicken Katsu.jpeg" alt="Chicken Katsu">
+            <h4>Chicken Katsu</h4>
+            <span>Dada ayam fillet tepung panir, salad, saus katsu</span>
+            <div class="price">Rp 28.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-makan">
+          <div class="menu-card">
+            <img src="asset/menu/Spaghetti Bolognese.jpeg" alt="Spaghetti">
+            <h4>Spaghetti Bolognese</h4>
+            <span>Pasta spaghetti, saus tomat daging cincang, keju parut</span>
+            <div class="price">Rp 30.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-makan">
+          <div class="menu-card">
+            <img src="asset/menu/Burger.jpeg" alt="Burger">
+            <h4>Burger Berkah</h4>
+            <span>Bun, beef patty, selada, tomat, keju slice, saus spesial</span>
+            <div class="price">Rp 35.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-makan">
+          <div class="menu-card">
+            <img src="asset/menu/Sadwich.jpeg" alt="Sandwich">
+            <h4>Club Sandwich</h4>
+            <span>Roti tawar, telur, smoked beef, selada, tomat, mayo</span>
+            <div class="price">Rp 25.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-minum">
+          <div class="menu-card">
+            <img src="asset/menu/Kopi Susu Gula Aren.jpeg" alt="Kopi Susu">
+            <h4>Kopi Susu Gula Aren</h4>
+            <span>Espresso, susu segar, gula aren asli</span>
+            <div class="price">Rp 18.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-minum">
+          <div class="menu-card">
+            <img src="asset/menu/Capuccino.jpeg" alt="Cappuccino">
+            <h4>Cappuccino</h4>
+            <span>Espresso, steamed milk, thick foam</span>
+            <div class="price">Rp 22.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-minum">
+          <div class="menu-card">
+            <img src="asset/menu/Cafe Latte.jpeg" alt="Latte">
+            <h4>Cafe Latte</h4>
+            <span>Espresso, steamed milk, light foam</span>
+            <div class="price">Rp 22.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-minum">
+          <div class="menu-card">
+            <img src="asset/menu/Americano.jpeg" alt="Americano">
+            <h4>Americano</h4>
+            <span>Espresso shot, hot/ice water</span>
+            <div class="price">Rp 18.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-minum">
+          <div class="menu-card">
+            <img src="asset/menu/Es Teh Manis.jpg" alt="Es Teh">
+            <h4>Es Teh Manis</h4>
+            <span>Teh melati pilihan, gula, es batu</span>
+            <div class="price">Rp 8.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-minum">
+          <div class="menu-card">
+            <img src="asset/menu/Lemon Tea.jpeg" alt="Lemon Tea">
+            <h4>Lemon Tea</h4>
+            <span>Teh segar, perasan jeruk lemon asli</span>
+            <div class="price">Rp 12.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-minum">
+          <div class="menu-card">
+            <img src="asset/menu/Matcha Latte.jpeg" alt="Matcha">
+            <h4>Matcha Latte</h4>
+            <span>Bubuk matcha jepang, susu segar</span>
+            <div class="price">Rp 24.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-minum">
+          <div class="menu-card">
+            <img src="asset/menu/Es Coklat.jpeg" alt="Coklat">
+            <h4>Ice Chocolate</h4>
+            <span>Bubuk coklat premium, susu segar, es batu</span>
+            <div class="price">Rp 22.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-minum">
+          <div class="menu-card">
+            <img src="asset/menu/Milkshake Vanilla.jpeg" alt="Milkshake">
+            <h4>Milkshake Vanilla</h4>
+            <span>Es krim vanilla, susu, topping cherry/waffer</span>
+            <div class="price">Rp 25.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-minum">
+          <div class="menu-card">
+            <img src="asset/menu/Air Mineral.jpeg" alt="Air Mineral">
+            <h4>Air Mineral</h4>
+            <span>Air mineral botol 600ml</span>
+            <div class="price">Rp 5.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-cemilan">
+          <div class="menu-card">
+            <img src="asset/menu/French Fries.jpeg" alt="French Fries">
+            <h4>French Fries</h4>
+            <span>Kentang goreng renyah, saus sambal & tomat</span>
+            <div class="price">Rp 18.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-cemilan">
+          <div class="menu-card">
+            <img src="asset/menu/Onion Ring.jpeg" alt="Onion Ring">
+            <h4>Onion Ring</h4>
+            <span>Bawang bombay goreng tepung, saus mayo</span>
+            <div class="price">Rp 20.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-cemilan">
+          <div class="menu-card">
+            <img src="asset/menu/Chicken Wings.jpeg" alt="Wings">
+            <h4>Chicken Wings</h4>
+            <span>Sayap ayam goreng bumbu gurih</span>
+            <div class="price">Rp 25.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-cemilan">
+          <div class="menu-card">
+            <img src="asset/menu/Pisang Goreng.jpeg" alt="Pisang Goreng">
+            <h4>Pisang Goreng</h4>
+            <span>Pisang kepok manis goreng tepung</span>
+            <div class="price">Rp 15.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 menu-item isotope-item filter-cemilan">
+          <div class="menu-card">
+            <img src="asset/menu/Tahu Crispy.jpeg" alt="Tahu">
+            <h4>Tahu Crispy</h4>
+            <span>Tahu potong dadu goreng tepung renyah, bumbu tabur</span>
+            <div class="price">Rp 12.000</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container text-center">
+      <div class="footer-brand">Cafe Berkah.</div>
+      <p class="mb-4 text-white fst-italic">"Rasakan kenyamanan nongkrong dengan cita rasa makanan Nusantara yang autentik."</p>
+      
+      <div class="social-links">
+        <a href="https://www.facebook.com/share/1GYb1JUFV6/"><i class="bi bi-facebook"></i></a>
+        <a href="https://www.instagram.com/cafeberkah_13?igsh=NnZhMGRwZ2d0Zndy"><i class="bi bi-instagram"></i></a>
+        <a href="https://x.com/"><i class="bi bi-twitter-x"></i></a>
+      </div>
+      
+      <div class="copyright">
+        &copy; Copyright <strong><span>Cafe Berkah</span></strong>. All Rights Reserved
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+  <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+  <script>
+    AOS.init();
+    
+    // Script Filter Menu (Isotope)
+    window.addEventListener('load', function() {
+      let menuContainer = document.querySelector('.isotope-container');
+      if (menuContainer) {
+        imagesLoaded(menuContainer, function() {
+          let menuIsotope = new Isotope(menuContainer, { itemSelector: '.isotope-item', layoutMode: 'masonry' });
+          let menuFilters = document.querySelectorAll('.menu-filters li');
+          menuFilters.forEach(function(el) {
+            el.addEventListener('click', function() {
+              document.querySelector('.menu-filters .filter-active').classList.remove('filter-active');
+              this.classList.add('filter-active');
+              menuIsotope.arrange({ filter: this.getAttribute('data-filter') });
+            });
+          });
+        });
+      }
+    });
+
+    // --- SCRIPT BARU: TOGGLE BURGER MENU (Agar responsif di HP) ---
+    const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+    if (mobileNavToggle) {
+        mobileNavToggle.addEventListener('click', function(e) {
+            document.body.classList.toggle('mobile-nav-active');
+            this.classList.toggle('bi-list');
+            this.classList.toggle('bi-x');
+        });
+    }
+  </script>
+</body>
+</html>

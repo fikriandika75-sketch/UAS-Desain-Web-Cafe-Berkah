@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Cafe Berkah - Nongkrong & Rasa Nusantara</title>
+
+  <link href="https://cdn-icons-png.flaticon.com/512/751/751621.png" rel="icon">
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <style>
+    /* --- 1. SETUP TEMA (WARM COFFEE) --- */
+    :root {
+      --bg-body: #1a120b;       /* Cokelat Espresso */
+      --bg-surface: #261a15;    /* Cokelat Kayu Tua */
+      --color-accent: #d4a373;  /* Warna Latte / Cream */
+      --color-text: #faedcd;    /* Putih Gading */
+      --color-muted: #a49688;   /* Abu Kecoklatan */
+      
+      --font-heading: 'Playfair Display', serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-body);
+      color: var(--color-text);
+      overflow-x: hidden;
+      line-height: 1.8;
+    }
+
+    a, a:hover, a:focus { text-decoration: none !important; outline: none; }
+    h1, h2, h3, h4, h5 { font-family: var(--font-heading); color: var(--color-text); font-weight: 700; margin-bottom: 15px; }
+    p { margin-bottom: 20px; font-size: 16px; color: var(--color-muted); }
+    
+    .text-gold { color: var(--color-accent) !important; }
+    .section-padding { padding: 100px 0; } 
+
+    /* --- 2. HEADER --- */
+    .header {
+      background: rgba(26, 18, 11, 0.95);
+      padding: 10px 0;
+      transition: all 0.5s;
+      z-index: 997;
+      border-bottom: 1px solid rgba(212, 163, 115, 0.1);
+      backdrop-filter: blur(15px);
+    }
+    .header .container { display: flex; align-items: center; justify-content: space-between; position: relative; }
+    .logo { font-size: 24px; font-weight: 700; letter-spacing: 1px; color: var(--color-text); z-index: 2; }
+    
+    /* Desktop Menu */
+    .navmenu { position: absolute; left: 50%; transform: translateX(-50%); }
+    .navmenu ul { margin: 0; padding: 0; display: flex; list-style: none; gap: 40px; }
+    .navmenu a {
+      color: rgba(250, 237, 205, 0.7); font-size: 13px; font-weight: 600; 
+      text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; position: relative; padding: 5px 0;
+    }
+    .navmenu a::after {
+      content: ""; position: absolute; width: 0; height: 1px; bottom: 0; left: 0;
+      background-color: var(--color-accent); transition: width 0.3s ease;
+    }
+    .navmenu a:hover, .navmenu a.active { color: var(--color-text); }
+    .navmenu a:hover::after, .navmenu a.active::after { width: 100%; }
+
+    /* --- INFO JAM BUKA (DESKTOP STYLE) --- */
+    .header-info { display: flex; align-items: center; gap: 12px; z-index: 2; }
+    .header-info i { font-size: 26px; color: var(--color-accent); }
+    .header-info-text { line-height: 1.2; text-align: left; }
+    .header-info-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--color-muted); display: block; }
+    .header-info-value { font-size: 14px; font-weight: 700; color: var(--color-text); display: block; }
+    .header-info-sub { font-size: 10px; color: var(--color-accent); display: block; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }
+
+    /* --- INFO JAM BUKA (MOBILE STYLE - MINIATUR) --- */
+    .mobile-header-info {
+        display: flex;
+        align-items: center;
+        gap: 8px; /* Jarak antara ikon jam dan teks */
+        margin-right: 15px; /* Jarak ke tombol burger */
+    }
+    .mobile-header-info i {
+        font-size: 20px; /* Ukuran ikon lebih kecil dari desktop */
+        color: var(--color-accent);
+    }
+    .mobile-info-text {
+        line-height: 1.1; /* Jarak antar baris teks lebih rapat */
+        text-align: left;
+    }
+    .mobile-label {
+        font-size: 7px; /* Label "JAM BUKA" kecil */
+        color: var(--color-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: block;
+    }
+    .mobile-value {
+        font-size: 11px; /* Jam Utama */
+        font-weight: 700;
+        color: var(--color-text);
+        display: block;
+    }
+    .mobile-sub {
+        font-size: 8px; /* Jam Jumat */
+        color: var(--color-accent);
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        display: block;
+    }
+
+    /* TOMBOL MENU MOBILE */
+    .mobile-nav-toggle {
+        color: var(--color-text);
+        font-size: 30px;
+        cursor: pointer;
+        display: none; 
+        z-index: 9999;
+    }
+
+    /* RESPONSIVE CSS (MOBILE) */
+    @media (max-width: 991px) {
+      .header-info { display: none; } /* Sembunyikan versi desktop */
+      .mobile-nav-toggle { display: block; } /* Tampilkan tombol burger */
+
+      /* Menu Slide Mobile */
+      .navmenu {
+        position: fixed;
+        top: 0; right: -100%;
+        width: 50vh; max-width: 300px;
+        height: 100vh;
+        transition: 0.3s;
+        z-index: 9997;
+        background: rgba(26, 18, 11, 0.98);
+        padding: 20px 20px 20px 20px;
+        display: block !important;
+        border-left: 1px solid rgba(212, 163, 115, 0.2);
+        left: auto; 
+        transform: none; 
+        overflow-y: auto;
+       }
+      
+      .navmenu ul { flex-direction: column; align-items: center; gap: 25px; }
+      .navmenu a { font-size: 16px; width: 100%; text-align: center; }
+      
+      body.mobile-nav-active .navmenu { right: 0; }
+      body.mobile-nav-active { overflow: hidden; }
+    }
+
+    /* --- 3. HERO SECTION --- */
+    .hero {
+      width: 100%; height: 100vh;
+      background: url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1920') top center;
+      background-size: cover; background-attachment: fixed;
+      position: relative; display: flex; align-items: center; justify-content: center; text-align: center;
+    }
+    .hero::before { 
+      content: ""; 
+      background: linear-gradient(to bottom, rgba(26, 18, 11, 0.5), rgba(26, 18, 11, 0.95)); 
+      position: absolute; inset: 0; 
+    }
+    .hero-container { position: relative; z-index: 2; padding-top: 40px; }
+    
+    .hero-welcome {
+        display: inline-block; font-family: var(--font-body); font-size: 14px; color: var(--color-accent); 
+        letter-spacing: 4px; text-transform: uppercase; font-weight: 700; margin-bottom: 20px; position: relative;
+    }
+    .hero-welcome::before, .hero-welcome::after {
+        content: ""; display: inline-block; width: 40px; height: 1px; background: var(--color-accent); 
+        vertical-align: middle; margin: 0 15px; opacity: 0.6;
+    }
+    .hero h2 { font-size: 64px; font-weight: 700; margin-bottom: 25px; line-height: 1.2; }
+    .hero p { color: rgba(250, 237, 205, 0.9); font-size: 18px; max-width: 700px; margin: 0 auto 40px auto; font-weight: 300; }
+
+    .btn-pro {
+      display: inline-block; padding: 14px 40px; border: 1px solid var(--color-accent); 
+      color: var(--color-accent); border-radius: 50px; font-size: 13px; font-weight: 600; 
+      text-transform: uppercase; letter-spacing: 2px; transition: 0.4s;
+    }
+    .btn-pro:hover { 
+      background: var(--color-accent); color: #1a120b; 
+      box-shadow: 0 0 25px rgba(212, 163, 115, 0.4); 
+    }
+    .btn-solid { background: var(--color-accent); color: #1a120b; }
+    .btn-solid:hover { background: transparent; color: var(--color-accent); }
+
+    /* --- 4. SECTION COMPONENTS --- */
+    .section-header { text-align: center; margin-bottom: 60px; }
+    .section-header h2 { font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: var(--color-muted); font-family: var(--font-body); margin-bottom: 10px; }
+    .section-header p { font-size: 42px; font-weight: 700; color: var(--color-accent); font-family: var(--font-heading); margin: 0; }
+
+    /* --- 5. ABOUT SECTION --- */
+    .about-img { 
+      border-radius: 12px; overflow: hidden; height: 100%; min-height: 480px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.5); 
+      border: 1px solid rgba(255,255,255,0.1); position: relative;
+    }
+    .about-img img { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: 0.5s; }
+    .about-img:hover img { transform: scale(1.05); }
+    
+    .about-content { display: flex; flex-direction: column; justify-content: center; height: 100%; padding: 20px 0; }
+    .about-content p { color: var(--color-text); font-size: 16px; font-weight: 300; margin-bottom: 25px; line-height: 1.8; text-align: justify; }
+    .about-list { list-style: none; padding: 0; margin-top: 15px; }
+    .about-list li { margin-bottom: 15px; display: flex; align-items: center; color: var(--color-text); font-size: 16px; font-weight: 500; }
+    .about-list i { color: var(--color-accent); font-size: 22px; margin-right: 15px; flex-shrink: 0; }
+
+    /* --- 6. CARDS (Menu & Fasilitas) --- */
+    .menu-card, .feature-box {
+        background: var(--bg-surface); padding: 40px 30px; border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.05); transition: 0.4s; height: 100%; 
+        display: flex; flex-direction: column; align-items: center; text-align: center;
+    }
+    .menu-card:hover, .feature-box:hover {
+        border-color: var(--color-accent); transform: translateY(-10px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    .menu-card img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+    .menu-card h4, .feature-box h4 { font-size: 20px; font-weight: 600; margin-bottom: 10px; color: #fff; }
+    .menu-card span { font-size: 14px; color: var(--color-muted); display: block; margin-bottom: 20px; flex-grow: 1; }
+    .menu-card .price { color: var(--color-accent); font-weight: 700; font-size: 22px; font-family: var(--font-heading); margin-top: auto; padding-top: 15px; border-top: 1px dashed rgba(255,255,255,0.1); width: 100%; }
+    .feature-box span { font-size: 45px; color: var(--color-accent); margin-bottom: 25px; display: block; font-weight: 700; font-family: var(--font-heading); }
+    .feature-box p { font-size: 15px; color: var(--color-muted); line-height: 1.7; margin: 0; }
+
+    /* Footer */
+    footer { background: #120c07; padding: 70px 0 30px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+    .footer-brand { font-size: 32px; font-family: var(--font-heading); color: var(--color-accent); margin-bottom: 20px; display: block; font-weight: 700; letter-spacing: 1px;}
+    .social-links a {
+      font-size: 18px; display: inline-flex; align-items: center; justify-content: center;
+      background: #2b1e16; color: var(--color-text); width: 45px; height: 45px; border-radius: 50%; 
+      margin: 0 8px; transition: 0.3s;
+    }
+    .social-links a:hover { background: var(--color-accent); color: #1a120b; transform: scale(1.1); }
+    .copyright { color: var(--color-muted); font-size: 13px; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 30px; }
+
+    /* Responsive Font Hero */
+    @media (max-width: 768px) {
+        .hero h2 { font-size: 40px; }
+        .hero p { font-size: 16px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header id="header" class="header fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+      
+      <a href="index.html" class="logo">Cafe <span class="text-gold ms-1">Berkah.</span></a>
+      
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html" class="active">Beranda</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="gallery.html">Galeri</a></li>
+          <li><a href="contact.html">Kontak</a></li>
+        </ul>
+      </nav>
+
+      <div class="d-flex align-items-center">
+          
+          <div class="header-info d-none d-lg-flex me-3">
+            <i class="bi bi-clock"></i>
+            <div class="header-info-text text-start">
+                <span class="header-info-label">Jam Buka</span>
+                <span class="header-info-value">10:00 - 23:00</span>
+                <span class="header-info-sub">JUMAT: 13:00 - 23:00</span>
+            </div>
+          </div>
+
+          <div class="mobile-header-info d-lg-none">
+              <i class="bi bi-clock"></i>
+              <div class="mobile-info-text">
+                  <span class="mobile-label">JAM BUKA</span>
+                  <span class="mobile-value">10:00 - 23:00</span>
+                  <span class="mobile-sub">JUMAT: 13:00 - 23:00</span>
+              </div>
+          </div>
+
+          <i class="mobile-nav-toggle d-lg-none bi bi-list"></i>
+
+      </div>
+
+    </div>
+  </header>
+
+  <section id="hero" class="hero">
+    <div class="container hero-container" data-aos="zoom-in" data-aos-delay="100">
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <span class="hero-welcome">Welcome to Cafe Berkah</span>
+          <h2>Nongkrong Nyaman <br>dengan <span class="text-gold">Rasa Nusantara</span></h2>
+          <p>Rasakan perpaduan suasana nongkrong yang hangat dengan cita rasa masakan Nusantara yang autentik. Tempat terbaik untuk bersantai dan berbagi cerita.</p>
+          <div class="d-flex gap-3 justify-content-center pt-4">
+            <a href="menu.html" class="btn-pro btn-solid">Lihat Menu</a>
+            <a href="contact.html" class="btn-pro">Reservasi</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="section-padding">
+    <div class="container" data-aos="fade-up">
+      <div class="row gy-5 align-items-stretch">
+        <div class="col-lg-6 order-1 order-lg-1" data-aos="fade-right">
+          <div class="about-img">
+            <img src="asset/galery/Restoran.jpg" alt="Interior Cafe">
+          </div>
+        </div>
+        <div class="col-lg-6 order-2 order-lg-2" data-aos="fade-left">
+          <div class="about-content">
+            <div class="section-header text-start mb-4">
+              <h2>TENTANG KAMI</h2>
+              <p>Rasa Autentik, Suasana Asik</p>
+            </div>
+            <p>
+              Cafe Berkah hadir bukan sekadar tempat makan, tapi sebagai "rumah kedua" untuk nongkrong. Kami memadukan kekayaan rempah Nusantara dalam setiap hidangan dengan kenyamanan tempat yang bikin betah berlama-lama.
+            </p>
+            <p>
+              Baik itu nasi goreng kampung dengan resep rahasia, atau kopi susu gula aren yang <i>creamy</i>, semuanya kami sajikan dengan sepenuh hati untuk menemani obrolan hangat Anda.
+            </p>
+            <ul class="about-list">
+              <li><i class="bi bi-check-circle-fill"></i> Masakan Nusantara dengan Bumbu Asli.</li>
+              <li><i class="bi bi-check-circle-fill"></i> Tempat Luas, Bersih, dan Instagramable.</li>
+              <li><i class="bi bi-check-circle-fill"></i> WiFi Kencang untuk WFC atau Mabar.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="menu-preview" class="section-padding" style="background: #1e1611;"> 
+    <div class="container" data-aos="fade-up">
+      <div class="section-header">
+        <h2>Favorit Tongkrongan</h2>
+        <p>Menu Pilihan Kami</p>
+      </div>
+
+      <div class="row gy-4">
+        
+        <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+          <div class="menu-card">
+            <img src="asset/menu/Kopi Susu Gula Aren.jpeg" alt="Kopi Susu Gula Aren">
+            <h4>Kopi Susu Gula Aren</h4>
+            <span>Espresso, susu segar, gula aren asli</span>
+            <div class="price">Rp 18.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+          <div class="menu-card">
+            <img src="asset/menu/Nasi Goreng Spesial.jpeg" alt="Nasi Goreng Spesial">
+            <h4>Nasi Goreng Spesial</h4>
+            <span>Nasi goreng kampung, telur mata sapi, ayam suwir</span>
+            <div class="price">Rp 25.000</div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+          <div class="menu-card">
+            <img src="asset/menu/Pisang Goreng.jpeg" alt="Pisang Goreng">
+            <h4>Pisang Goreng</h4>
+            <span>Pisang kepok manis goreng tepung</span>
+            <div class="price">Rp 15.000</div>
+          </div>
+        </div>
+
+      </div>
+      
+      <div class="text-center mt-5">
+          <a href="menu.html" class="btn-pro">Lihat Semua Menu</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="why-us" class="section-padding">
+    <div class="container" data-aos="fade-up">
+      <div class="section-header">
+        <h2>Fasilitas</h2>
+        <p>Kenapa Harus Kami</p>
+      </div>
+
+      <div class="row gy-4">
+        <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+          <div class="feature-box">
+            <span>01</span>
+            <h4>Kenyamanan Maksimal</h4>
+            <p>Sofa empuk, AC dingin, dan suasana tenang. Cocok buat yang mau curhat lama atau ngerjain tugas.</p>
+          </div>
+        </div>
+
+        <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="feature-box">
+            <span>02</span>
+            <h4>Cita Rasa Autentik</h4>
+            <p>Bumbu rempah asli Indonesia yang kuat dan meresap. Dijamin lidah tidak akan kecewa.</p>
+          </div>
+        </div>
+
+        <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
+          <div class="feature-box">
+            <span>03</span>
+            <h4>Harga Bersahabat</h4>
+            <p>Tempat boleh premium, tapi harga tetap ramah di kantong pelajar dan mahasiswa. Nongkrong hemat tanpa pusing.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="footer">
+    <div class="container text-center">
+      <div class="footer-brand">Cafe Berkah.</div>
+      <p class="mb-4 text-white fst-italic ">"Rasakan kenyamanan nongkrong dengan cita rasa makanan Nusantara yang autentik."</p>
+      
+      <div class="social-links">
+        <a href="https://www.facebook.com/share/1GYb1JUFV6/"><i class="bi bi-facebook"></i></a>
+        <a href="https://www.instagram.com/cafeberkah_13?igsh=NnZhMGRwZ2d0Zndy"><i class="bi bi-instagram"></i></a>
+        <a href="https://x.com/"><i class="bi bi-twitter-x"></i></a>
+      </div>
+      
+      <div class="copyright">
+        &copy; Copyright <strong><span>Cafe Berkah</span></strong>. All Rights Reserved
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    AOS.init({
+      duration: 1000,
+      easing: 'ease-in-out',
+      once: true,
+      mirror: false
+    });
+
+    // --- SCRIPT UNTUK MENU MOBILE ---
+    const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+    if (mobileNavToggle) {
+        mobileNavToggle.addEventListener('click', function(e) {
+            document.body.classList.toggle('mobile-nav-active');
+            this.classList.toggle('bi-list');
+            this.classList.toggle('bi-x');
+        });
+    }
+  </script>
+
+</body>
+</html>

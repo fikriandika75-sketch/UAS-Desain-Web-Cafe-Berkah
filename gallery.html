@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Galeri - Cafe Berkah</title>
+
+  <link href="https://cdn-icons-png.flaticon.com/512/751/751621.png" rel="icon">
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet">
+
+  <style>
+    /* --- 1. SETUP TEMA --- */
+    :root {
+      --bg-body: #1a120b;
+      --bg-surface: #261a15;
+      --color-accent: #d4a373;
+      --color-text: #faedcd;
+      --color-muted: #a49688;
+      --font-heading: 'Playfair Display', serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-body);
+      color: var(--color-text);
+      overflow-x: hidden;
+      line-height: 1.8;
+    }
+
+    a, a:hover, a:focus { text-decoration: none !important; outline: none; }
+    h1, h2, h3, h4, h5 { font-family: var(--font-heading); color: var(--color-text); font-weight: 700; }
+    
+    .text-gold { color: var(--color-accent) !important; }
+
+    /* --- 2. HEADER (SAMA DENGAN INDEX & MENU) --- */
+    .header {
+      background: rgba(26, 18, 11, 0.95);
+      padding: 10px 0;
+      transition: all 0.5s;
+      z-index: 997;
+      border-bottom: 1px solid rgba(212, 163, 115, 0.1);
+      backdrop-filter: blur(15px);
+    }
+    .header .container { display: flex; align-items: center; justify-content: space-between; position: relative; }
+    
+    .logo { 
+        font-size: 24px; font-weight: 700; letter-spacing: 1px; color: var(--color-text); z-index: 2; 
+        display: flex; align-items: center; 
+    }
+    
+    /* Desktop Menu */
+    .navmenu { position: absolute; left: 50%; transform: translateX(-50%); }
+    .navmenu ul { margin: 0; padding: 0; display: flex; list-style: none; gap: 40px; }
+    .navmenu a {
+      color: rgba(250, 237, 205, 0.7); font-size: 13px; font-weight: 600; 
+      text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; position: relative; padding: 5px 0;
+    }
+    .navmenu a::after {
+      content: ""; position: absolute; width: 0; height: 1px; bottom: 0; left: 0;
+      background-color: var(--color-accent); transition: width 0.3s ease;
+    }
+    .navmenu a:hover, .navmenu a.active { color: var(--color-text); }
+    .navmenu a:hover::after, .navmenu a.active::after { width: 100%; }
+
+    /* Jam Buka Desktop */
+    .header-info { display: flex; align-items: center; gap: 12px; z-index: 2; }
+    .header-info i { font-size: 26px; color: var(--color-accent); }
+    .header-info-text { line-height: 1.2; text-align: left; }
+    .header-info-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--color-muted); display: block; }
+    .header-info-value { font-size: 14px; font-weight: 700; color: var(--color-text); display: block; }
+    .header-info-sub { font-size: 10px; color: var(--color-accent); display: block; font-weight: 600; letter-spacing: 0.5px; margin-top: 2px; }
+
+    /* --- INFO JAM BUKA (MOBILE STYLE) --- */
+    .mobile-header-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-right: 15px;
+    }
+    .mobile-header-info i { font-size: 20px; color: var(--color-accent); }
+    .mobile-info-text { line-height: 1.1; text-align: left; }
+    .mobile-label { font-size: 7px; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; }
+    .mobile-value { font-size: 11px; font-weight: 700; color: var(--color-text); display: block; }
+    .mobile-sub { font-size: 8px; color: var(--color-accent); font-weight: 600; letter-spacing: 0.3px; display: block; }
+
+    /* TOMBOL MENU MOBILE */
+    .mobile-nav-toggle {
+        color: var(--color-text);
+        font-size: 30px;
+        cursor: pointer;
+        display: none; 
+        z-index: 9999;
+    }
+
+    /* RESPONSIVE HEADER CSS */
+    @media (max-width: 991px) {
+      .header-info { display: none; }
+      .mobile-nav-toggle { display: block; }
+
+      /* Menu Slide Mobile */
+      .navmenu {
+        position: fixed;
+        top: 0; right: -100%;
+        width: 50vh; max-width: 300px;
+        height: 100vh;
+        transition: 0.3s;
+        z-index: 9997;
+        background: rgba(26, 18, 11, 0.98);
+        padding: 20px 20px 20px 20px;
+        display: block !important;
+        border-left: 1px solid rgba(212, 163, 115, 0.2);
+        left: auto; 
+        transform: none; 
+        overflow-y: auto;
+       }
+      
+      .navmenu ul { flex-direction: column; align-items: center; gap: 25px; }
+      .navmenu a { font-size: 16px; width: 100%; text-align: center; }
+      
+      body.mobile-nav-active .navmenu { right: 0; }
+      body.mobile-nav-active { overflow: hidden; }
+    }
+
+    /* --- 3. GALLERY STYLING --- */
+    .gallery-page { padding-top: 140px; padding-bottom: 80px; }
+    .section-title { text-align: center; margin-bottom: 50px; }
+    .section-title h2 { font-size: 48px; margin-bottom: 10px; color: var(--color-accent); }
+    .section-title p { color: var(--color-muted); font-size: 16px; }
+
+    /* Thumbnail Gallery */
+    .gallery-item { 
+        overflow: hidden; 
+        border: 2px solid rgba(212, 163, 115, 0.2); 
+        border-radius: 12px; 
+        position: relative;
+        margin-bottom: 24px;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+    
+    .gallery-item img { 
+        width: 100%; 
+        height: 280px; 
+        object-fit: cover; 
+        transition: transform 0.5s ease; 
+        display: block;
+    }
+    
+    .gallery-item:hover { border-color: var(--color-accent); }
+    .gallery-item:hover img { transform: scale(1.05); filter: brightness(90%); }
+
+    /* Hover Zoom Icon */
+    .gallery-item::after {
+        content: "\F62C"; font-family: "bootstrap-icons"; position: absolute;
+        top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
+        color: var(--color-accent); font-size: 40px; transition: 0.3s;
+        pointer-events: none; z-index: 2;
+    }
+    .gallery-item:hover::after { transform: translate(-50%, -50%) scale(1); }
+
+    /* --- POPUP IMAGE SETTINGS --- */
+    .gslide-image img {
+        object-fit: contain !important; 
+        width: auto !important;
+        height: auto !important;
+        max-height: 90vh !important; 
+        max-width: 90vw !important; 
+    }
+    .glightbox-clean .gslide-description { background: rgba(0, 0, 0, 0.7); }
+    .glightbox-clean .gslide-title { color: var(--color-accent); font-family: var(--font-heading); }
+
+    /* --- 4. TESTIMONIALS --- */
+    .testimonials { background: #1e1611; padding: 100px 0; border-top: 1px solid rgba(212, 163, 115, 0.1); }
+    .testimonial-item { 
+        padding: 40px 30px; background: var(--bg-surface); border-radius: 12px; 
+        border: 1px solid rgba(212, 163, 115, 0.1); height: 100%; text-align: center;
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        min-height: 300px;
+    }
+    .testimonial-item h3 { color: var(--color-text); font-size: 20px; margin-bottom: 5px; font-family: var(--font-heading); }
+    .testimonial-item h4 { font-size: 12px; color: var(--color-muted); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;}
+    .testimonial-item p { font-size: 15px; line-height: 1.7; color: var(--color-text); font-style: italic; margin-bottom: 0; }
+    .testimonial-item i { color: var(--color-accent); font-size: 30px; margin-bottom: 20px; }
+
+    /* Footer */
+    footer { background: #120c07; padding: 70px 0 30px 0; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; }
+    .footer-brand { font-size: 32px; font-family: var(--font-heading); color: var(--color-accent); margin-bottom: 20px; display: block; font-weight: 700; }
+    .social-links a {
+      font-size: 18px; display: inline-flex; align-items: center; justify-content: center;
+      background: var(--bg-surface); color: var(--color-text); width: 45px; height: 45px; border-radius: 50%; 
+      margin: 0 8px; transition: 0.3s;
+    }
+    .social-links a:hover { background: var(--color-accent); color: #1a120b; }
+    .copyright { color: var(--color-muted); font-size: 13px; margin-top: 40px; }
+
+  </style>
+</head>
+
+<body>
+
+  <header id="header" class="header fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+      
+      <a href="index.html" class="logo">Cafe <span class="text-gold ms-1">Berkah.</span></a>
+      
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html">Beranda</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="gallery.html" class="active">Galeri</a></li>
+          <li><a href="contact.html">Kontak</a></li>
+        </ul>
+      </nav>
+
+      <div class="d-flex align-items-center">
+          
+          <div class="header-info d-none d-lg-flex me-3">
+            <i class="bi bi-clock"></i>
+            <div class="header-info-text text-start">
+                <span class="header-info-label">Jam Buka</span>
+                <span class="header-info-value">10:00 - 23:00</span>
+                <span class="header-info-sub">JUMAT: 13:00 - 23:00</span>
+            </div>
+          </div>
+
+          <div class="mobile-header-info d-lg-none">
+              <i class="bi bi-clock"></i>
+              <div class="mobile-info-text">
+                  <span class="mobile-label">JAM BUKA</span>
+                  <span class="mobile-value">10:00 - 23:00</span>
+                  <span class="mobile-sub">JUMAT: 13:00 - 23:00</span>
+              </div>
+          </div>
+
+          <i class="mobile-nav-toggle d-lg-none bi bi-list"></i>
+
+      </div>
+
+    </div>
+  </header>
+
+  <section class="gallery-page">
+    <div class="container section-title" data-aos="fade-up">
+      <h2>Galeri Momen</h2>
+      <p>Kumpulan kenangan manis dan sudut nyaman di Cafe Berkah</p>
+    </div>
+
+    <div class="container-fluid" data-aos="fade-up" data-aos-delay="100">
+      <div class="row g-3">
+        
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="gallery-item">
+                <a href="asset/galery/Restoran.jpg" class="glightbox" data-gallery="my-gallery" title="Interior Cafe">
+                    <img src="asset/galery/Restoran.jpg" alt="Interior Cafe">
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="gallery-item">
+                <a href="asset/menu/Kopi Susu Gula Aren.jpeg" class="glightbox" data-gallery="my-gallery" title="Kopi Nikmat">
+                    <img src="asset/menu/Kopi Susu Gula Aren.jpeg" alt="Kopi Nikmat">
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="gallery-item">
+                <a href="asset/galery/SuasanaMalam.jpg" class="glightbox" data-gallery="my-gallery" title="Suasana Malam">
+                    <img src="asset/galery/SuasanaMalam.jpg" alt="Suasana Malam">
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="gallery-item">
+                <a href="asset/menu/Ayam Geprek.jpg" class="glightbox" data-gallery="my-gallery" title="Makanan Lezat">
+                    <img src="asset/menu/Ayam Geprek.jpg" alt="Makanan Lezat">
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="gallery-item">
+                <a href="asset/galery/Barista.jpeg" class="glightbox" data-gallery="my-gallery" title="Barista">
+                    <img src="asset/galery/Barista.jpeg" alt="Barista">
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="gallery-item">
+                <a href="asset/galery/SudutSantai.jpeg" class="glightbox" data-gallery="my-gallery" title="Sudut Santai">
+                    <img src="asset/galery/SudutSantai.jpeg" alt="Sudut Santai">
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="gallery-item">
+                <a href="asset/menu/Nasi Goreng Spesial.jpeg" class="glightbox" data-gallery="my-gallery" title="Menu Spesial">
+                    <img src="asset/menu/Nasi Goreng Spesial.jpeg" alt="Menu Spesial">
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="gallery-item">
+                <a href="asset/galery/AreaOutdoor.jpeg" class="glightbox" data-gallery="my-gallery" title="Area Outdoor">
+                    <img src="asset/galery/AreaOutdoor.jpeg" alt="Area Outdoor">
+                </a>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <div class="container">
+      <div class="section-title mb-5" data-aos="fade-up">
+        <h2>Ulasan Pelanggan</h2>
+        <p>Apa kata mereka tentang Cafe Berkah?</p>
+      </div>
+      
+      <div class="swiper init-swiper" data-aos="fade-up" data-aos-delay="100">
+        <div class="swiper-wrapper">
+          
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <i class="bi bi-quote"></i>
+              <h3>Budi Santoso</h3>
+              <h4>Mahasiswa</h4>
+              <p>Tempatnya enak banget buat nugas. WiFi kenceng, kopinya pas, dan colokan banyak.</p>
+            </div>
+          </div>
+          
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <i class="bi bi-quote"></i>
+              <h3>Siti Aminah</h3>
+              <h4>Ibu Rumah Tangga</h4>
+              <p>Nasi goreng spesialnya juara! Rasanya otentik bumbu kampung. Pelayanan ramah banget.</p>
+            </div>
+          </div>
+          
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <i class="bi bi-quote"></i>
+              <h3>Rizky Pratama</h3>
+              <h4>Freelancer</h4>
+              <p>Kopi susu aren terbaik di kota ini. Manisnya pas gak bikin enek. Cozy buat WFC.</p>
+            </div>
+          </div>
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <i class="bi bi-quote"></i>
+              <h3>Andi Wijaya</h3>
+              <h4>Komunitas Motor</h4>
+              <p>Parkiran luas, gorengannya mantap buat kumpul bareng anak-anak komunitas. Recommended!</p>
+            </div>
+          </div>
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <i class="bi bi-quote"></i>
+              <h3>Lina Marlina</h3>
+              <h4>Selebgram</h4>
+              <p>Spot fotonya aesthetic parah! Tiap sudut bagus buat konten. Cahayanya dapet banget.</p>
+            </div>
+          </div>
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <i class="bi bi-quote"></i>
+              <h3>Pak Joko</h3>
+              <h4>Pegawai Kantor</h4>
+              <p>Suka banget sama Americano-nya. Rasanya strong bikin melek pas istirahat kerja.</p>
+            </div>
+          </div>
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <i class="bi bi-quote"></i>
+              <h3>Rina Kartika</h3>
+              <h4>Penulis</h4>
+              <p>Suasananya tenang kalau siang, enak buat cari inspirasi nulis novel. Toast-nya juga enak.</p>
+            </div>
+          </div>
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <i class="bi bi-quote"></i>
+              <h3>Dimas Anggara</h3>
+              <h4>Musisi Lokal</h4>
+              <p>Live music-nya asik, sound system oke. Seneng bisa perform atau sekadar nonton di sini.</p>
+            </div>
+          </div>
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <i class="bi bi-quote"></i>
+              <h3>Bu Dewi</h3>
+              <h4>Arisan Sosialita</h4>
+              <p>Tempatnya bersih dan luas, cocok banget buat acara arisan ibu-ibu. Makanannya juga higienis.</p>
+            </div>
+          </div>
+
+          <div class="swiper-slide">
+            <div class="testimonial-item">
+              <i class="bi bi-quote"></i>
+              <h3>Fajar Nugraha</h3>
+              <h4>Gamer</h4>
+              <p>Ping internet stabil buat mabar game online. Es teh manis jumbonya seger banget!</p>
+            </div>
+          </div>
+
+        </div>
+        <div class="swiper-pagination mt-5"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-brand">Cafe Berkah.</div>
+      <p class="mb-4 text-white fst-italic">"Rasakan kenyamanan nongkrong dengan cita rasa makanan Nusantara yang autentik."</p>
+      <div class="social-links">
+        <a href="https://www.facebook.com/share/1GYb1JUFV6/"><i class="bi bi-facebook"></i></a>
+        <a href="https://www.instagram.com/cafeberkah_13?igsh=NnZhMGRwZ2d0Zndy"><i class="bi bi-instagram"></i></a>
+        <a href="https://x.com/"><i class="bi bi-twitter-x"></i></a>
+      </div>
+      <div class="copyright">
+        &copy; Copyright <strong><span>Cafe Berkah</span></strong>. All Rights Reserved
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    AOS.init();
+    
+    // SETUP LIGHTBOX FOR FULL IMAGE & SLIDER
+    const glightbox = GLightbox({ 
+        selector: '.glightbox', 
+        touchNavigation: true,  
+        loop: true,             
+        zoomable: false,        
+        width: 'auto',          
+        height: 'auto'          
+    });
+    
+    // Setup Testimonial Slider
+    new Swiper('.init-swiper', {
+      loop: true, speed: 600, autoplay: { delay: 3000, disableOnInteraction: false },
+      slidesPerView: 'auto', spaceBetween: 30,
+      pagination: { el: '.swiper-pagination', clickable: true },
+      breakpoints: { 
+        320: { slidesPerView: 1, spaceBetween: 20 }, 
+        768: { slidesPerView: 2, spaceBetween: 20 }, 
+        1024: { slidesPerView: 3, spaceBetween: 30 } 
+      }
+    });
+
+    // --- SCRIPT BARU: TOGGLE BURGER MENU (Agar responsif di HP) ---
+    const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+    if (mobileNavToggle) {
+        mobileNavToggle.addEventListener('click', function(e) {
+            document.body.classList.toggle('mobile-nav-active');
+            this.classList.toggle('bi-list');
+            this.classList.toggle('bi-x');
+        });
+    }
+  </script>
+</body>
+</html>
